@@ -1,0 +1,6 @@
+Library
+*.meta
+Assets/Standard*
+Assembly*
+*.sln
+*.userprefs
