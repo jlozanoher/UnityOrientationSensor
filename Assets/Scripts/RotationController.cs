@@ -10,7 +10,10 @@ public class RotationController : MonoBehaviour
     private int mWorldChoice = 0;
 	private int orientationAlgorithm;
 
+	// Rotate this camera with the mobile orientation	
 	public bool rotateCamera = false;
+	// Move camera forward on touch
+	public bool moveOnTouch = false;
 	public GameObject cubeGyro;
 	public GameObject cubeOriginalOrientation;
 	public GameObject cubeModifiedOrientation;
@@ -18,6 +21,7 @@ public class RotationController : MonoBehaviour
 	public GameObject cubeGameRotationVector;
 	public GameObject cubeGeomagneticRotation;
 
+	public float sensitivity = 10;
     public Text infoText;
 	public Text quatText;
     static bool gyroBool;
@@ -57,6 +61,9 @@ public class RotationController : MonoBehaviour
     }
  
     void Update () {
+    	if(Input.touchCount > 0){
+       		transform.Translate(Vector3.forward * sensitivity);
+    	}
         if (gyroBool) {
             #if UNITY_IPHONE
 				quatGyro = gyro.attitude;
@@ -95,6 +102,7 @@ public class RotationController : MonoBehaviour
 
 		if (rotateCamera) {
 			transform.localRotation = GyroToUnity(mSensor.getQuaternionFromRotationMatrix ());
+			transform.Rotate(90f, 180f, 0f, Space.World);
 		}
 
 		// cubeGyro.transform.localRotation = quatGyro * quatMult;
