@@ -9,9 +9,7 @@ public class Sensor : MonoBehaviour
 
     private AndroidJavaObject pluginObject = null;
     private AndroidJavaObject activityContext = null;
-    private float alpha = 0, beta = 0, gamma = 0;
-
-    private Vector3 mOrientation;    
+    private float alpha = 0, beta = 0, gamma = 0;    
 
 	private Quaternion quatFromRotaionMatrix;
 	private Quaternion quatOriginalOrientation;
@@ -21,8 +19,7 @@ public class Sensor : MonoBehaviour
 	private Quaternion quatGeomagneticRotation;
 
     void Start()
-    {
-        mOrientation = new Vector3(0, 0, 0);
+    {        
         
         if (Application.platform == RuntimePlatform.Android)
         {
@@ -90,37 +87,26 @@ public class Sensor : MonoBehaviour
 		gamma = pluginObject.Call<float>("getRollGeomagnetic"); // Gamma
 
 		quatGeomagneticRotation.Set(alpha, beta, gamma, 0);
-
-      //  mOrientation.Set((float)(alpha * 180 / Math.PI),(float) (beta * 180 / Math.PI),(float) (gamma * 180 / Math.PI));
-
-//        infoText.text = "alpha: " + alpha * 180 / Math.PI + "\n" +
-//            "beta: " + beta * 180 / Math.PI+ "\n" +
-//            "gamma: " + gamma * 180 / Math.PI;
     }    
 
 	public Quaternion getOriginalOrientation(){
-		//return quatOriginalOrientation;
-		return getQuaternion(quatOriginalOrientation.x, quatOriginalOrientation.y, quatOriginalOrientation.z);
+		return quatOriginalOrientation;		
 	}
 
 	public Quaternion getModifiedOrientation(){
-		//return quatModifiedOrientation;
-		return getQuaternion(quatModifiedOrientation.x, quatModifiedOrientation.y, quatModifiedOrientation.z);
+		return quatModifiedOrientation;		
 	}
 
 	public Quaternion getRotationVector(){
-		//return quatRotationVector;
-		return getQuaternion(quatRotationVector.x, quatRotationVector.y, quatRotationVector.z);
+		return quatRotationVector;		
 	}
 
 	public Quaternion getGameRotationVector(){
-		//return quatGameRotationVector;
-		return getQuaternion(quatGameRotationVector.x, quatGameRotationVector.y, quatGameRotationVector.z);
+		return quatGameRotationVector;		
 	}
 
 	public Quaternion getGeomagneticRotation(){
-		//return quatGeomagneticRotation;
-		return getQuaternion(quatGeomagneticRotation.x, quatGeomagneticRotation.y, quatGeomagneticRotation.z);
+		return quatGeomagneticRotation;		
 	}
 
 	public Quaternion getQuaternionFromRotationMatrix(){
@@ -129,48 +115,9 @@ public class Sensor : MonoBehaviour
 
     public Quaternion getQuaternion()
     {
-//        return new Quaternion(0, beta, gamma, alpha);
 		return normalizeQuat(quatFromRotaionMatrix);
-//        return getQuaternion(beta, gamma, alpha);
     }
-
-    public Quaternion getQuaternion(float x, float y, float z)
-    {
-        float degToRad = (float)Math.PI / 180;
-
-        float _x, _y, _z;
-        float _x_2, _y_2, _z_2;
-        float cX, cY, cZ, sX, sY, sZ;
-
-//        _z = z * degToRad;
-//        _x = x * degToRad;
-//        _y = y * degToRad;
-
-        _z = z;
-        _x = x;
-        _y = y;
-
-        _z_2 = _z / 2;
-        _x_2 = _x / 2;
-        _y_2 = _y / 2;
-
-        cX = (float)Math.Cos(_x_2);
-        cY = (float)Math.Cos(_y_2);
-        cZ = (float)Math.Cos(_z_2);
-        sX = (float)Math.Sin(_x_2);
-        sY = (float)Math.Sin(_y_2);
-        sZ = (float)Math.Sin(_z_2);
-
-        Quaternion quaternion = new Quaternion(
-            sX * cY * cZ - cX * sY * sZ, // X
-            cX * sY * cZ + sX * cY * sZ, // Y
-            cX * cY * sZ + sX * sY * cZ, // Z
-            cX * cY * cZ - sX * sY * sZ  // W
-            );
-
-        return quaternion;
-        return normalizeQuat(quaternion);
-    }
+   
 
     private Quaternion normalizeQuat(Quaternion quaternion)
     {
